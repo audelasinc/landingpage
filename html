@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audelas | Intelligence that drives every decision forward</title>
+    
+    <!-- Fonts: Inter & Plus Jakarta Sans for that modern Fintech look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config for specific colors/fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Inter"', 'sans-serif'],
+                        display: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        audelas: {
+                            50: '#f5f3ff', // Lavender mist
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6', // Primary Violet
+                            600: '#7c3aed', // Primary Indigo
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 40px -10px rgba(124, 58, 237, 0.3)',
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Utilities */
+        body {
+            background-color: #ffffff;
+            color: #0f172a;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+            border-color: rgba(139, 92, 246, 0.2);
+        }
+
+        .mesh-gradient {
+            background: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                        radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                        radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+        }
+
+        .soft-mesh {
+            background-color: #ffffff;
+            background-image: 
+                radial-gradient(at 40% 20%, hsla(260,100%,94%,1) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, hsla(240,100%,96%,1) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(270,100%,96%,1) 0px, transparent 50%);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float-delayed {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float-delayed {
+            animation: float-delayed 7s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+
+        /* Hide scrollbar for horizontal scrolling sections */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden selection:bg-audelas-200 selection:text-audelas-900">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 top-0 glass-panel border-b border-white/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="#" class="flex items-center gap-2 group">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-audelas-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-audelas-500/20">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        </div>
+                        <span class="font-display font-bold text-xl tracking-tight text-slate-900">Audelas</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#platform" class="text-sm font-medium text-slate-600 hover:text-audelas-600 transition-colors">Platform</a>
+                    <a href="#solutions" class="text-sm font-medium text-slate-600 hover:text-audelas-600 transition-colors">Solutions</a>
+                    <a href="#impact" class="text-sm font-medium text-slate-600 hover:text-audelas-600 transition-colors">Impact</a>
+                    <a href="#login" class="text-sm font-medium text-slate-600 hover:text-audelas-600 transition-colors">Log in</a>
+                    <a href="#waitlist" class="px-5 py-2.5 rounded-full bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10">
+                        Join Waitlist
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-900">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu (Hidden) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 p-4 absolute w-full">
+            <div class="flex flex-col space-y-4">
+                <a href="#platform" class="text-slate-600 font-medium">Platform</a>
+                <a href="#solutions" class="text-slate-600 font-medium">Solutions</a>
+                <a href="#impact" class="text-slate-600 font-medium">Impact</a>
+                <a href="#waitlist" class="text-audelas-600 font-bold">Join Waitlist</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden soft-mesh">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+                
+                <!-- Left: Content -->
+                <div class="max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-audelas-50 border border-audelas-100 text-audelas-700 text-xs font-semibold uppercase tracking-wide mb-6">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                        Introducing Audelas Intelligence
+                    </div>
+                    
+                    <h1 class="font-display font-bold text-5xl lg:text-6xl tracking-tight text-slate-900 mb-6 leading-[1.1]">
+                        Intelligence that drives every <span class="text-transparent bg-clip-text bg-gradient-to-r from-audelas-600 to-indigo-400">decision forward.</span>
+                    </h1>
+                    
+                    <p class="text-lg text-slate-600 mb-8 leading-relaxed max-w-lg">
+                        With Audelas, every learner, educator, and employer gets the clarity to make better decisions and unlock lasting success through data-driven guidance.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="px-8 py-4 rounded-full bg-audelas-600 text-white font-medium hover:bg-audelas-700 transition-all shadow-lg shadow-audelas-600/25 flex items-center justify-center gap-2">
+                            Join Waitlist <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                        <button class="px-8 py-4 rounded-full bg-white border border-slate-200 text-slate-700 font-medium hover:border-audelas-200 hover:bg-audelas-50 transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="play-circle" class="w-4 h-4"></i> Watch Demo
+                        </button>
+                    </div>
+
+                    <div class="mt-8 flex items-center gap-4 text-sm text-slate-500">
+                        <div class="flex -space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center text-xs font-bold text-slate-600">JD</div>
+                            <div class="w-8 h-8 rounded-full bg-indigo-200 border-2 border-white flex items-center justify-center text-xs font-bold text-indigo-600">AS</div>
+                            <div class="w-8 h-8 rounded-full bg-purple-200 border-2 border-white flex items-center justify-center text-xs font-bold text-purple-600">MR</div>
+                        </div>
+                        <p>Trusted by top institutions</p>
+                    </div>
+                </div>
+
+                <!-- Right: Abstract Interface Mockup -->
+                <div class="relative lg:h-[600px] w-full flex items-center justify-center">
+                    <!-- Decorative background glow -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-audelas-200/40 via-purple-200/40 to-indigo-200/40 blur-3xl rounded-full"></div>
+
+                    <!-- Main Dashboard Card -->
+                    <div class="relative w-full max-w-md bg-white/80 backdrop-blur-xl border border-white/60 rounded-2xl shadow-2xl shadow-indigo-900/10 p-6 animate-float">
+                        <!-- Header Mockup -->
+                        <div class="flex items-center justify-between mb-8">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-slate-100 to-slate-200 flex items-center justify-center">
+                                    <i data-lucide="user" class="w-5 h-5 text-slate-500"></i>
+                                </div>
+                                <div>
+                                    <div class="h-2 w-24 bg-slate-200 rounded-full mb-1.5"></div>
+                                    <div class="h-2 w-16 bg-slate-100 rounded-full"></div>
+                                </div>
+                            </div>
+                            <div class="px-3 py-1 rounded-full bg-green-50 text-green-600 text-xs font-bold border border-green-100">
+                                98% Alignment
+                            </div>
+                        </div>
+
+                        <!-- Graph Area Mockup -->
+                        <div class="space-y-4 mb-8">
+                            <div class="flex justify-between items-end h-32 gap-2">
+                                <div class="w-full bg-audelas-50 rounded-t-lg h-[40%]"></div>
+                                <div class="w-full bg-audelas-100 rounded-t-lg h-[60%]"></div>
+                                <div class="w-full bg-audelas-200 rounded-t-lg h-[45%]"></div>
+                                <div class="w-full bg-gradient-to-t from-audelas-500 to-indigo-400 rounded-t-lg h-[85%] relative group cursor-pointer">
+                                    <!-- Tooltip -->
+                                    <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                        Optimization Peak
+                                    </div>
+                                </div>
+                                <div class="w-full bg-audelas-100 rounded-t-lg h-[55%]"></div>
+                            </div>
+                        </div>
+
+                        <!-- Recommendations List -->
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-50 shadow-sm">
+                                <div class="w-8 h-8 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center">
+                                    <i data-lucide="zap" class="w-4 h-4"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="h-2 w-32 bg-slate-200 rounded-full mb-1"></div>
+                                    <div class="h-1.5 w-20 bg-slate-100 rounded-full"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-50 shadow-sm">
+                                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center">
+                                    <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="h-2 w-28 bg-slate-200 rounded-full mb-1"></div>
+                                    <div class="h-1.5 w-24 bg-slate-100 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Widget 1 -->
+                    <div class="absolute -right-4 top-20 bg-white p-4 rounded-xl shadow-xl border border-white/50 animate-float-delayed w-48">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-audelas-500"></i>
+                            <span class="text-xs font-bold text-slate-700">AI Insight</span>
+                        </div>
+                        <p class="text-[10px] text-slate-500 leading-tight">Career trajectory aligns with emerging market demand.</p>
+                    </div>
+
+                    <!-- Floating Widget 2 -->
+                    <div class="absolute -left-8 bottom-32 bg-white/90 backdrop-blur p-3 rounded-xl shadow-lg border border-slate-100 animate-float w-40">
+                         <div class="flex justify-between items-center mb-1">
+                             <span class="text-[10px] text-slate-400 uppercase font-bold">Retention</span>
+                             <span class="text-xs font-bold text-green-600">+12%</span>
+                         </div>
+                         <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                             <div class="bg-green-500 h-full w-[85%] rounded-full"></div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Row -->
+    <section class="border-y border-slate-100 bg-white/50 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                <div class="px-4">
+                    <div class="text-4xl lg:text-5xl font-bold text-slate-900 mb-2 font-display">90,000+</div>
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wide">Guided Journeys</div>
+                </div>
+                <div class="px-4 pt-8 md:pt-0">
+                    <div class="text-4xl lg:text-5xl font-bold text-slate-900 mb-2 font-display">200k+</div>
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wide">Trusted Decisions</div>
+                </div>
+                <div class="px-4 pt-8 md:pt-0">
+                    <div class="text-4xl lg:text-5xl font-bold text-slate-900 mb-2 font-display">300+</div>
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wide">Institutions</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Section -->
+    <section id="platform" class="py-24 bg-gradient-to-b from-white to-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-display font-bold text-3xl md:text-4xl text-slate-900 mb-4">From Guidance to Intelligence — All in One Platform.</h2>
+                <p class="text-slate-600 text-lg">Audelas unifies the user journey with deep data intelligence.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Platform Layer Card -->
+                <div class="group relative bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden h-[500px] flex flex-col">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-fuchsia-50 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-fuchsia-100 transition-colors"></div>
+                    
+                    <div class="relative z-10 flex-1">
+                        <div class="w-12 h-12 rounded-xl bg-fuchsia-50 text-fuchsia-600 flex items-center justify-center mb-6">
+                            <i data-lucide="layers" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-3">Platform Layer</h3>
+                        <p class="text-slate-600">Where participants engage, plan, and progress through agent-led UX designed for clarity and action.</p>
+                    </div>
+
+                    <!-- Visual Representation -->
+                    <div class="relative mt-8 h-64 bg-slate-50 rounded-2xl border border-slate-100 p-6 flex flex-col gap-4 group-hover:translate-y-[-10px] transition-transform duration-500">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-white border border-slate-200"></div>
+                                <div class="h-2 w-20 bg-slate-200 rounded-full"></div>
+                            </div>
+                            <div class="px-2 py-1 bg-white rounded border border-slate-200 text-[10px]">Active</div>
+                        </div>
+                        <div class="flex-1 bg-white rounded-xl border border-dashed border-slate-200 flex items-center justify-center text-slate-300 text-sm">
+                            Interface View
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Intelligence Layer Card -->
+                <div class="group relative bg-slate-900 rounded-3xl p-8 border border-slate-800 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden h-[500px] flex flex-col">
+                    <div class="absolute bottom-0 left-0 w-80 h-80 bg-audelas-900 rounded-full blur-3xl -ml-20 -mb-20 opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                    
+                    <div class="relative z-10 flex-1">
+                        <div class="w-12 h-12 rounded-xl bg-slate-800 text-audelas-400 flex items-center justify-center mb-6 border border-slate-700">
+                            <i data-lucide="cpu" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Intelligence Layer</h3>
+                        <p class="text-slate-400">Where multi-source signals transform into insights, predictive models, and trusted outcomes.</p>
+                    </div>
+
+                    <!-- Visual Representation -->
+                    <div class="relative mt-8 h-64 bg-slate-800/50 rounded-2xl border border-slate-700 p-6 flex items-center justify-center gap-4 group-hover:translate-y-[-10px] transition-transform duration-500 overflow-hidden">
+                        <!-- Connecting dots animation concept -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-2 h-2 bg-audelas-500 rounded-full animate-ping absolute top-1/3 left-1/4"></div>
+                            <div class="w-2 h-2 bg-indigo-500 rounded-full animate-ping absolute bottom-1/3 right-1/3 animation-delay-500"></div>
+                            <div class="w-24 h-24 border border-slate-600 rounded-full flex items-center justify-center">
+                                <div class="w-16 h-16 border border-slate-500 rounded-full flex items-center justify-center bg-slate-800">
+                                    <i data-lucide="brain-circuit" class="w-6 h-6 text-audelas-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section id="solutions" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                <div class="max-w-2xl">
+                    <span class="text-audelas-600 font-semibold tracking-wide uppercase text-sm">Solutions</span>
+                    <h2 class="font-display font-bold text-3xl md:text-4xl text-slate-900 mt-2">Built for people. Backed by intelligence.</h2>
+                </div>
+                <a href="#" class="text-audelas-600 font-medium hover:text-audelas-700 flex items-center gap-2">View all solutions <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-card rounded-2xl p-6 h-full flex flex-col justify-between group cursor-pointer hover:border-audelas-200">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2">Student Experience</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">Personalized pathways that guide students from enrollment to employment.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card rounded-2xl p-6 h-full flex flex-col justify-between group cursor-pointer hover:border-audelas-200">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2">Institutional Dashboard</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">Real-time visibility into retention risks and engagement metrics.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card rounded-2xl p-6 h-full flex flex-col justify-between group cursor-pointer hover:border-audelas-200">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="briefcase" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2">Employer Signals</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">Connect curriculum to career demands with live labor market data.</p>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="glass-card rounded-2xl p-6 h-full flex flex-col justify-between group cursor-pointer hover:border-audelas-200">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="microscope" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2">Research Insights</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">Deep-dive analytics for longitudinal studies and grant reporting.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="font-display font-bold text-3xl md:text-4xl text-slate-900 mb-4">Together, we shape the future of learning and work.</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-slate-900 mb-2">Admissions</h4>
+                    <p class="text-sm text-slate-500">Predict enrollment success with higher accuracy.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-slate-900 mb-2">Retention</h4>
+                    <p class="text-sm text-slate-500">Identify at-risk students before they drop out.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-slate-900 mb-2">Career Alignment</h4>
+                    <p class="text-sm text-slate-500">Bridge the gap between degrees and jobs.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-slate-900 mb-2">Research Acceleration</h4>
+                    <p class="text-sm text-slate-500">Automate data collection for academic studies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Model -->
+    <section class="py-24 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 relative">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-slate-200 to-transparent -translate-y-1/2 z-0"></div>
+
+                <!-- Card 1 -->
+                <div class="relative z-10 bg-white p-8 rounded-3xl border border-slate-100 shadow-lg text-center h-full flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-6 text-2xl font-bold border border-indigo-100">1</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Measured Signals</h3>
+                    <p class="text-slate-500 text-sm">Granular data capture across the entire student lifecycle.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="relative z-10 bg-audelas-600 p-8 rounded-3xl border border-audelas-500 shadow-xl shadow-audelas-600/20 text-center h-full flex flex-col items-center transform md:-translate-y-4">
+                    <div class="w-16 h-16 rounded-2xl bg-white/20 text-white flex items-center justify-center mb-6 text-2xl font-bold backdrop-blur-sm">2</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Trusted Outcomes</h3>
+                    <p class="text-indigo-100 text-sm">Verified results that build confidence for all stakeholders.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="relative z-10 bg-white p-8 rounded-3xl border border-slate-100 shadow-lg text-center h-full flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-2xl bg-fuchsia-50 text-fuchsia-600 flex items-center justify-center mb-6 text-2xl font-bold border border-fuchsia-100">3</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Compounded Value</h3>
+                    <p class="text-slate-500 text-sm">Intelligence that gets smarter with every interaction.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section id="impact" class="py-24 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="font-display font-bold text-3xl md:text-5xl mb-16">Measured Progress. <span class="text-audelas-300">Trusted Outcomes.</span></h2>
+            
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="flex flex-col items-center">
+                    <div class="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6 backdrop-blur-sm">
+                        <i data-lucide="map" class="w-8 h-8 text-audelas-300"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Pathways made visible</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed max-w-xs mx-auto">Clarifying the steps between where learners are and where they want to go.</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6 backdrop-blur-sm">
+                        <i data-lucide="database" class="w-8 h-8 text-audelas-300"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Data that drives clarity</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed max-w-xs mx-auto">Cutting through the noise to provide actionable, timely intelligence.</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6 backdrop-blur-sm">
+                        <i data-lucide="award" class="w-8 h-8 text-audelas-300"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Insights into outcomes</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed max-w-xs mx-auto">Transforming abstract metrics into tangible real-world success.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Evidence / Case Studies -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="font-display font-bold text-3xl text-slate-900">One platform. Endless possibilities.</h2>
+                <div class="hidden md:flex gap-2">
+                    <button class="p-2 rounded-full border border-slate-200 hover:bg-slate-50"><i data-lucide="arrow-left" class="w-5 h-5 text-slate-600"></i></button>
+                    <button class="p-2 rounded-full border border-slate-200 hover:bg-slate-50"><i data-lucide="arrow-right" class="w-5 h-5 text-slate-600"></i></button>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <a href="#" class="group block">
+                    <div class="rounded-2xl bg-slate-100 h-64 mb-6 relative overflow-hidden">
+                         <div class="absolute inset-0 bg-slate-200 group-hover:scale-105 transition-transform duration-700"></div>
+                         <div class="absolute bottom-6 left-6 bg-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm">Case Study</div>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-audelas-600 transition-colors">How University X increased retention by 15%</h3>
+                    <p class="text-slate-500">Leveraging predictive signals to intervene before students dropped out.</p>
+                </a>
+                <a href="#" class="group block">
+                    <div class="rounded-2xl bg-slate-100 h-64 mb-6 relative overflow-hidden">
+                         <div class="absolute inset-0 bg-slate-200 group-hover:scale-105 transition-transform duration-700"></div>
+                         <div class="absolute bottom-6 left-6 bg-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm">Case Study</div>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-audelas-600 transition-colors">Connecting 5,000 graduates to tech careers</h3>
+                    <p class="text-slate-500">Using employer signaling to align curriculum with market needs.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-24 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="font-display font-bold text-3xl text-center text-slate-900 mb-12">Frequently Asked Questions</h2>
+            
+            <div class="space-y-4">
+                <details class="group bg-white rounded-xl shadow-sm [&_summary::-webkit-details-marker]:hidden open:ring-1 ring-audelas-200">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer text-slate-900 font-medium">
+                        How does Audelas integrate with existing LMS?
+                        <span class="ml-4 transition-transform duration-200 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400"></i>
+                        </span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-600 leading-relaxed">
+                        Audelas is designed with an API-first architecture, allowing seamless integration with Canvas, Blackboard, and other major Learning Management Systems to pull data without disrupting workflows.
+                    </div>
+                </details>
+
+                <details class="group bg-white rounded-xl shadow-sm [&_summary::-webkit-details-marker]:hidden open:ring-1 ring-audelas-200">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer text-slate-900 font-medium">
+                        Is student data secure?
+                        <span class="ml-4 transition-transform duration-200 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400"></i>
+                        </span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-600 leading-relaxed">
+                        Absolutely. We adhere to SOC2 Type II compliance and GDPR regulations. All data is encrypted at rest and in transit, ensuring maximum privacy for institutions and learners.
+                    </div>
+                </details>
+
+                <details class="group bg-white rounded-xl shadow-sm [&_summary::-webkit-details-marker]:hidden open:ring-1 ring-audelas-200">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer text-slate-900 font-medium">
+                        Can employers access specific student profiles?
+                        <span class="ml-4 transition-transform duration-200 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400"></i>
+                        </span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-600 leading-relaxed">
+                        Employers see aggregated skill signals and verified credentials. Direct student access is only permitted when a student explicitly opts-in to share their profile for recruitment purposes.
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white pt-20 pb-10 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-16">
+                <div class="col-span-2 lg:col-span-2">
+                    <div class="flex items-center gap-2 mb-6">
+                         <div class="w-8 h-8 rounded-lg bg-audelas-600 flex items-center justify-center text-white">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        </div>
+                        <span class="font-display font-bold text-xl tracking-tight text-slate-900">Audelas</span>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed max-w-xs mb-6">
+                        The intelligence platform bridging the gap between education and employment.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-slate-400 hover:text-audelas-600 transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-audelas-600 transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-audelas-600 transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-4">Platform</h4>
+                    <ul class="space-y-3 text-sm text-slate-500">
+                        <li><a href="#" class="hover:text-audelas-600">Student Journey</a></li>
+                        <li><a href="#" class="hover:text-audelas-600">Institutional Data</a></li>
+                        <li><a href="#" class="hover:text-audelas-600">Employer Signals</a></li>
+                        <li><a href="#" class="hover:text-audelas-600">Integrations</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-4">Company</h4>
+                    <ul class="space-y-3 text-sm text-slate-500">
+                        <li><a href="#" class="hover:text-audelas-600">About</a></li>
+                        <li><a href="#" class="hover:text-audelas-600">Careers</a></li>
+                        <li><a href="#" class="hover:text-audelas-600">Blog</a></li>
+                        <li><a href="#" class="hover:text-audelas-600">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-4">Legal</h4>
+                    <ul class="space-y-3 text-sm text-slate-500">
+                        <li><a href="#" class="hover:text-audelas-600">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-audelas-600">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-audelas-600">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-400 text-sm">© 2025 Audelas Inc. All rights reserved.</p>
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                    <span class="text-slate-500 text-sm font-medium">Systems Operational</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Navbar blur effect on scroll
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-sm');
+                nav.classList.replace('bg-white/65', 'bg-white/90');
+            } else {
+                nav.classList.remove('shadow-sm');
+                nav.classList.replace('bg-white/90', 'bg-white/65');
+            }
+        });
+    </script>
+</body>
+</html>
