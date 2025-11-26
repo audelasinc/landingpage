@@ -1,0 +1,130 @@
+// backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums for data integrity
+enum Role {
+  STUDENT
+  INSTITUTION_ADMIN
+}
+
+enum AppStatus {
+  EXPLORING
+  APPLIED
+  ACCEPTED
+  ENROLLED
+}
+
+// 1. Users (Indexed on email for fast login)
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  passwordHash  String
+  role          Role
+  createdAt     DateTime @default(now())
+
+  // Relations
+  studentProfile StudentProfile?
+  institution    Institution?    @relation("AdminInstitution")
+  applications   Application[]
+  events         Event[]
+  scores         StudentProgramScore[]
+
+  @@index([email])
+}
+
+// 2. Profiles (1:1 with User)
+model StudentProfile {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @unique
+  user        User     @relation(fields: [userId], references: [id])
+  name        String
+  goals       String?
+  interests   String[] 
+  constraints String?
+
+  @@index([userId])
+}
+
+// 3. Institutions & Programs
+model Institution {
+  id          Int       @id @default(autoincrement())
+  name        String
+  adminUserId Int       @unique
+  adminUser   User      @relation("AdminInstitution", fields: [adminUserId], references: [id])
+  programs    Program[]
+
+  @@index([adminUserId])
+}
+
+model Program {
+  id            Int       @id @default(autoincrement())
+  institutionId Int
+  institution   Institution @relation(fields: [institutionId], references: [id])
+  name          String
+  tags          String[]
+  
+  applications  Application[]
+  events        Event[]
+  scores        StudentProgramScore[]
+
+  @@index([institutionId])
+}
+
+// 4. Applications (Composite index for uniqueness and fast lookup)
+model Application {
+  id        Int       @id @default(autoincrement())
+  studentId Int
+  programId Int
+  status    AppStatus @default(EXPLORING)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  student   User    @relation(fields: [studentId], references: [id])
+  program   Program @relation(fields: [programId], references: [id])
+
+  @@unique([studentId, programId])
+  @@index([studentId])
+  @@index([programId])
+  @@index([status])
+}
+
+// 5. Events (High volume table - indexed by student/program pair)
+model Event {
+  id        Int      @id @default(autoincrement())
+  type      String   // 'VIEW', 'CLICK', 'APPLY'
+  studentId Int
+  programId Int?
+  metadata  Json?
+  timestamp DateTime @default(now())
+
+  student   User     @relation(fields: [studentId], references: [id])
+  program   Program? @relation(fields: [programId], references: [id])
+
+  @@index([studentId, programId]) 
+  @@index([timestamp])
+}
+
+// 6. Scores (Derived data for fast reads)
+model StudentProgramScore {
+  id              Int   @id @default(autoincrement())
+  studentId       Int
+  programId       Int
+  engagementScore Float @default(0)
+  fitScore        Float @default(0)
+  yieldRiskScore  Float @default(0)
+
+  student User    @relation(fields: [studentId], references: [id])
+  program Program @relation(fields: [programId], references: [id])
+
+  @@unique([studentId, programId])
+  @@index([yieldRiskScore]) 
+  @@index([fitScore])
+}
