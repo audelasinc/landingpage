@@ -97,6 +97,7 @@
         const AlertTriangle = ({ className }) => <Icon className={className}><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></Icon>;
         const CheckCircle = ({ className }) => <Icon className={className}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></Icon>;
         const Zap = ({ className }) => <Icon className={className}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></Icon>;
+        const Flag = ({ className }) => <Icon className={className}><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></Icon>;
 
         // --- COMPONENTS ---
 
@@ -124,7 +125,6 @@
                             <a href="#how-it-works" className="hover:text-blue-600 transition-colors">How it Works</a>
                             <a href="#protection" className="hover:text-blue-600 transition-colors">Protection</a>
                             <a href="#events" className="hover:text-blue-600 transition-colors">Events</a>
-                            <a href="#pricing" className="hover:text-blue-600 transition-colors">Pricing</a>
                         </div>
                         <div className="hidden md:block">
                             <button className="bg-slate-900 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform">
@@ -480,41 +480,85 @@
             );
         };
 
-        const Testimonials = () => {
+        const Events = () => {
+            const events = [
+                {
+                    title: "FIFA World Cup 2026",
+                    location: "North America (16 Cities)",
+                    stats: "Millions of international travelers expected",
+                    color: "bg-blue-500",
+                    textColor: "text-blue-500"
+                },
+                {
+                    title: "Tour de France",
+                    location: "France",
+                    stats: "12–15 million annual spectators",
+                    color: "bg-yellow-500",
+                    textColor: "text-yellow-600"
+                },
+                {
+                    title: "Olympic Games",
+                    location: "Global",
+                    stats: "Millions of international visitors",
+                    color: "bg-red-500",
+                    textColor: "text-red-500"
+                },
+                {
+                    title: "Super Bowl",
+                    location: "USA",
+                    stats: "High-volume domestic travel spike",
+                    color: "bg-indigo-600",
+                    textColor: "text-indigo-600"
+                },
+                {
+                    title: "Formula 1",
+                    location: "Global Circuits",
+                    stats: "Massive international crowds",
+                    color: "bg-red-600",
+                    textColor: "text-red-600"
+                },
+                {
+                    title: "Wimbledon",
+                    location: "London, UK",
+                    stats: "Top-tier global tennis attendance",
+                    color: "bg-green-600",
+                    textColor: "text-green-600"
+                },
+                {
+                    title: "Indy 500",
+                    location: "Indianapolis, USA",
+                    stats: "350,000+ single-day attendees",
+                    color: "bg-orange-500",
+                    textColor: "text-orange-600"
+                },
+                {
+                    title: "The Masters",
+                    location: "Augusta, USA",
+                    stats: "Exclusive, high-demand pilgrimage",
+                    color: "bg-emerald-700",
+                    textColor: "text-emerald-700"
+                }
+            ];
+
             return (
-                <section className="py-24 bg-white">
+                <section className="py-24 bg-white" id="events">
                     <div className="max-w-7xl mx-auto px-6">
                         <div className="text-center mb-16">
-                            <h2 className="text-3xl font-bold text-slate-900">Trusted by Superfans</h2>
-                            <p className="text-slate-500 mt-2">The official travel partner for people who don't miss the moment.</p>
+                            <h2 className="text-3xl font-bold text-slate-900">Events We Cover</h2>
+                            <p className="text-slate-500 mt-2">Logistics for the world's biggest stages.</p>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {[
-                                {
-                                    text: "I was following Man City to Istanbul. My flight got cancelled 6 hours before. Voyavent had already booked me a backup seat on another airline before I even woke up.",
-                                    name: "Sarah Jenkins",
-                                    badge: "Champions League Final"
-                                },
-                                {
-                                    text: "Booking a flight and hotel separately for F1 is a nightmare. Voyavent synced everything to the qualifying schedule. It just makes sense.",
-                                    name: "David Chen",
-                                    badge: "Miami Grand Prix"
-                                },
-                                {
-                                    text: "Expensive, but the peace of mind is worth it. Knowing that my trip is insured against 'missed kick-off' is a game changer for international games.",
-                                    name: "Marcus Aloi",
-                                    badge: "World Cup Qualifier"
-                                }
-                            ].map((item, i) => (
-                                <div key={i} className="p-8 bg-slate-50 rounded-2xl border border-slate-100">
-                                    <div className="flex gap-1 mb-4">
-                                        {[1,2,3,4,5].map(s => <div key={s} className="w-4 h-4 bg-yellow-400 rounded-sm"></div>)}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {events.map((event, i) => (
+                                <div key={i} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all group">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <div className={`w-10 h-10 rounded-xl ${event.color} flex items-center justify-center text-white font-bold shadow-md`}>
+                                            {event.title.charAt(0)}
+                                        </div>
+                                        <Flag className="w-5 h-5 text-slate-300 group-hover:text-slate-400" />
                                     </div>
-                                    <p className="text-slate-700 mb-6 font-medium leading-relaxed">"{item.text}"</p>
-                                    <div>
-                                        <p className="font-bold text-slate-900">{item.name}</p>
-                                        <p className="text-xs text-blue-600 font-bold uppercase tracking-wide mt-1">{item.badge}</p>
-                                    </div>
+                                    <h3 className="font-bold text-slate-900 text-lg mb-1">{event.title}</h3>
+                                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400 mb-3">{event.location}</p>
+                                    <p className="text-sm text-slate-600 leading-relaxed">{event.stats}</p>
                                 </div>
                             ))}
                         </div>
@@ -548,7 +592,6 @@
                         <ul className="space-y-3">
                             <li><a href="#" className="hover:text-blue-600">How it Works</a></li>
                             <li><a href="#" className="hover:text-blue-600">RecoverAI™</a></li>
-                            <li><a href="#" className="hover:text-blue-600">Pricing</a></li>
                             <li><a href="#" className="hover:text-blue-600">Download App</a></li>
                         </ul>
                     </div>
@@ -576,7 +619,7 @@
                     <Hero />
                     <ValueProps />
                     <InteractiveDemo />
-                    <Testimonials />
+                    <Events />
                     <Footer />
                 </div>
             );
