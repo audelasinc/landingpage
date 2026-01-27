@@ -1,922 +1,553 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Voyavent - Event First Travel Orchestration</title>
-    <meta
-      name="description"
-      content="Voyavent is an event first travel orchestration platform for high friction journeys like global sports tournaments and major cultural events."
-    />
-    <meta name="theme-color" content="#ffffff" />
-    <style>
-      :root{
-        /* Light Theme Palette */
-        --bg: #ffffff;
-        --panel: #ffffff;
-        --panel-glass: rgba(255, 255, 255, 0.85);
-        --text: #0f172a;       /* Slate 900 */
-        --muted: #475569;      /* Slate 600 */
-        --muted2: #94a3b8;     /* Slate 400 */
-        
-        /* Borders & Lines */
-        --line: rgba(148, 163, 184, 0.2);
-        --line-strong: rgba(148, 163, 184, 0.4);
-        
-        /* Brand Colors - Adjusted for Light Mode */
-        --brand: #6366f1;      /* Indigo 500 */
-        --brand2: #0ea5e9;     /* Sky 500 */
-        --brand-dim: rgba(99, 102, 241, 0.1);
-        
-        /* Status Colors */
-        --ok: #10b981;         /* Emerald 500 */
-        --warn: #f59e0b;       /* Amber 500 */
-        --bad: #ef4444;        /* Red 500 */
-        
-        /* Effects */
-        --shadow: 0 10px 40px -10px rgba(15, 23, 42, 0.08);
-        --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.05);
-        --radius: 20px;
-      }
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  ArrowRight, 
+  ShieldCheck, 
+  MapPin, 
+  Calendar, 
+  Clock,
+  Menu,
+  X,
+  Plane,
+  Ticket,
+  AlertTriangle,
+  CheckCircle,
+  Smartphone,
+  Zap
+} from 'lucide-react';
 
-      *{box-sizing:border-box}
-      html,body{height:100%}
-      
-      body{
-        margin:0;
-        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        background:
-          /* Top Right Blue Glow */
-          radial-gradient(1000px 800px at 100% 0%, rgba(14, 165, 233, 0.08), transparent 60%),
-          /* Top Left Indigo Glow */
-          radial-gradient(1000px 800px at 0% 0%, rgba(99, 102, 241, 0.08), transparent 60%),
-          /* Bottom Center Mint Hint */
-          radial-gradient(800px 400px at 50% 100%, rgba(16, 185, 129, 0.05), transparent 70%),
-          var(--bg);
-        color:var(--text);
-        line-height:1.5;
-        -webkit-font-smoothing: antialiased;
-      }
+// --- COMPONENTS ---
 
-      a{color:inherit; text-decoration:none; transition: color 0.2s}
-      a:hover{color: var(--brand)}
+const Navbar = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-      .wrap{max-width:1120px; margin:0 auto; padding:0 24px}
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-      /* Navigation */
-      .nav{
-        position:sticky; top:0; z-index:20;
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        background: rgba(255, 255, 255, 0.85);
-        border-bottom:1px solid var(--line);
-      }
-      .nav-inner{
-        display:flex; align-items:center; justify-content:space-between;
-        height:72px;
-      }
-      .brand{
-        display:flex; align-items:center; gap:12px;
-        font-weight:700;
-        font-size: 18px;
-        letter-spacing:-0.5px;
-        color: var(--text);
-      }
-      .brand:hover{color: var(--text)} /* Keep brand text dark on hover */
-
-      .logo{
-        width:36px; height:36px; border-radius:10px;
-        background: linear-gradient(135deg, var(--brand), var(--brand2));
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
-        position:relative;
-        overflow:hidden;
-      }
-      /* Shine effect on logo */
-      .logo::after{
-        content:"";
-        position:absolute; inset:-40%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent);
-        transform: rotate(20deg);
-        animation: sheen 6s ease-in-out infinite;
-      }
-      @keyframes sheen{
-        0%{transform:translateX(-20%) rotate(20deg)}
-        20%{transform:translateX(120%) rotate(20deg)}
-        100%{transform:translateX(120%) rotate(20deg)}
-      }
-
-      .nav-links{
-        display:flex; align-items:center; gap:8px;
-        color:var(--muted);
-        font-weight:600;
-        font-size:14px;
-      }
-      .nav-links a{padding:8px 16px; border-radius:99px; color: var(--muted)}
-      .nav-links a:hover{background:rgba(15, 23, 42, 0.04); color:var(--text)}
-
-      /* Buttons */
-      .cta{display:flex; gap:12px; align-items:center}
-      
-      .btn{
-        border:1px solid var(--line);
-        background: #ffffff;
-        color:var(--text);
-        padding:10px 18px;
-        border-radius:12px;
-        font-weight:600;
-        font-size:14px;
-        cursor:pointer;
-        transition: all .2s ease;
-        box-shadow: var(--shadow-sm);
-      }
-      .btn:hover{
-        transform: translateY(-1px); 
-        background: #f8fafc;
-        border-color: var(--line-strong);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        color: var(--text);
-      }
-      
-      .btn.primary{
-        border:none;
-        background: linear-gradient(135deg, var(--brand), var(--brand2));
-        color: #ffffff;
-        box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
-      }
-      .btn.primary:hover{
-        transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
-        color: white;
-      }
-
-      /* Hero Section */
-      .hero{padding:80px 0 60px}
-      .hero-grid{
-        display:grid;
-        grid-template-columns: 1.15fr .85fr;
-        gap:48px;
-        align-items:start;
-      }
-
-      .pill-row{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:24px}
-      .pill{
-        display:inline-flex; align-items:center; gap:8px;
-        padding:8px 14px;
-        border-radius:999px;
-        background: var(--brand-dim);
-        border: 1px solid rgba(99, 102, 241, 0.1);
-        color: var(--brand);
-        font-size:13px;
-        font-weight:600;
-      }
-      .dot{width:8px; height:8px; border-radius:999px; background: var(--ok); box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px rgba(16, 185, 129, 0.2)}
-
-      h1{
-        font-size: clamp(40px, 5vw, 64px);
-        line-height:1.05;
-        margin: 0 0 20px;
-        letter-spacing: -1.5px;
-        color: var(--text);
-        background: linear-gradient(to right, var(--text), var(--brand));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-fill-color: transparent;
-        display: inline-block; /* Fix for bg clip */
-      }
-      
-      .sub{
-        color: var(--muted);
-        font-size: 19px;
-        line-height: 1.6;
-        max-width: 54ch;
-        margin: 0 0 32px;
-      }
-
-      .hero-actions{display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-bottom:24px}
-
-      .small{
-        color: var(--muted2);
-        font-size: 13px;
-        margin-top: 24px;
-        line-height: 1.6;
-      }
-
-      /* Cards & Panels */
-      .panel{
-        background: var(--panel);
-        border:1px solid var(--line);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-      .card{padding:24px}
-
-      .card h3{
-        margin:0 0 16px;
-        font-size:16px;
-        font-weight: 600;
-        color: var(--text);
-      }
-
-      .metric{display:grid; grid-template-columns: 1fr; gap:12px}
-      .metric .row{
-        display:flex; justify-content:space-between; align-items:center;
-        padding:14px 16px;
-        border-radius:14px;
-        background: #f8fafc;
-        border:1px solid var(--line);
-        font-weight:600;
-        color: var(--muted);
-        font-size:14px;
-      }
-      
-      .tag{
-        font-weight:700;
-        color: var(--text);
-        display:inline-flex; align-items:center; gap:8px;
-        font-size: 13px;
-      }
-      .tag i{width:8px; height:8px; border-radius:999px; display:inline-block}
-      .ok i{background: var(--ok); box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2)}
-      .warn i{background: var(--warn); box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2)}
-      .bad i{background: var(--bad); box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2)}
-
-      .divider{height:1px; background: var(--line); margin: 24px -24px}
-
-      /* Features */
-      .section{padding: 80px 0}
-      .section h2{
-        margin:0 0 16px;
-        font-size: 32px;
-        letter-spacing:-1px;
-        color: var(--text);
-      }
-      .section p.lead{
-        margin:0 0 40px;
-        color: var(--muted);
-        max-width: 70ch;
-        font-size: 18px;
-        line-height: 1.6;
-      }
-
-      .grid3{display:grid; grid-template-columns: repeat(3, 1fr); gap:24px}
-      .grid2{display:grid; grid-template-columns: 1fr 1fr; gap:24px}
-
-      .feature{
-        padding:28px;
-        background: #ffffff;
-      }
-      .feature:hover{
-        transform: translateY(-4px);
-        box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.12);
-        border-color: rgba(99, 102, 241, 0.3);
-      }
-
-      .kicker{
-        color: var(--brand);
-        font-weight:700;
-        font-size:11px;
-        letter-spacing:1px;
-        text-transform: uppercase;
-        margin-bottom:12px;
-        background: rgba(99, 102, 241, 0.08);
-        display: inline-block;
-        padding: 4px 8px;
-        border-radius: 6px;
-      }
-
-      .feature h3{margin:0 0 10px; font-size:18px; color: var(--text)}
-      .feature p{margin:0; color: var(--muted); font-size:15px; line-height: 1.6}
-
-      /* Lists in features */
-      .list{margin:24px 0 0; padding:0; list-style:none; display:grid; gap:12px}
-      .li{
-        display:flex; gap:12px; align-items:flex-start;
-        padding:16px;
-        border-radius:14px;
-        background: #f8fafc;
-        border: 1px solid var(--line);
-      }
-      .chk{
-        width:20px; height:20px; border-radius:6px;
-        background: rgba(16, 185, 129, 0.15);
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        flex:0 0 auto;
-        margin-top:2px;
-        position:relative;
-      }
-      .chk:after{
-        content:""; position:absolute; left:6px; top:4px;
-        width:6px; height:9px;
-        border-right:2px solid var(--ok);
-        border-bottom:2px solid var(--ok);
-        transform: rotate(40deg);
-      }
-      .li strong{display:block; font-size:15px; margin:0 0 4px; color: var(--text)}
-      .li span{display:block; color: var(--muted); font-size:14px; line-height: 1.4}
-
-      /* Contact / Form */
-      .cta-band{
-        display:grid;
-        grid-template-columns: 1fr 1fr;
-        gap:32px;
-        align-items:stretch;
-      }
-      .cta-box{
-        padding:32px;
-        border-radius: var(--radius);
-        border:1px solid rgba(99, 102, 241, 0.15);
-        background: linear-gradient(135deg, #ffffff, #f0f9ff);
-        box-shadow: var(--shadow);
-      }
-      .cta-box h3{margin:0 0 8px; font-size:20px; color: var(--text)}
-      .cta-box p{margin:0 0 24px; color: var(--muted)}
-
-      form{display:grid; gap:16px}
-      label{font-weight:600; font-size:13px; color: var(--text); margin-bottom: 4px; display:block}
-      
-      input, textarea, select{
-        width:100%;
-        padding:12px 16px;
-        border-radius:12px;
-        border:1px solid #cbd5e1;
-        background: #ffffff;
-        color: var(--text);
-        font-family: inherit;
-        font-size: 15px;
-        outline:none;
-        transition: border-color .15s ease, box-shadow .15s ease;
-      }
-      textarea{min-height:120px; resize:vertical}
-      
-      input:focus, textarea:focus, select:focus{
-        border-color: var(--brand);
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-      }
-      
-      input::placeholder, textarea::placeholder{color: #cbd5e1}
-
-      /* Footer */
-      .footer{
-        padding: 40px 0 60px;
-        color: var(--muted2);
-        font-size: 14px;
-        border-top: 1px solid var(--line);
-        background: #f8fafc;
-      }
-      .footrow{
-        display:flex; align-items:center; justify-content:space-between; gap:24px;
-        flex-wrap:wrap;
-      }
-      .right a{color: var(--muted); margin-left:16px; font-weight: 500}
-      .right a:hover{color: var(--brand)}
-
-      /* Mobile */
-      .mobile-only{display:none}
-      @media (max-width: 920px){
-        .hero-grid{grid-template-columns:1fr; gap:32px}
-        .grid3, .grid2, .cta-band{grid-template-columns:1fr}
-        .nav-links{display:none}
-        .mobile-only{display:inline-flex}
-        h1{font-size: 36px}
-        .section h2{font-size: 28px}
-      }
-
-      /* Toast */
-      .toast{
-        position: fixed;
-        right: 20px;
-        bottom: 20px;
-        width: 100%;
-        max-width: 380px;
-        background: #ffffff;
-        border: 1px solid var(--line);
-        border-left: 4px solid var(--ok);
-        border-radius: 12px;
-        padding: 16px;
-        box-shadow: 0 20px 60px -10px rgba(0,0,0,0.15);
-        display:none;
-        z-index: 100;
-        animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-      @keyframes slideIn{
-        from{transform:translateY(20px); opacity:0}
-        to{transform:translateY(0); opacity:1}
-      }
-      .toast strong{display:block; font-size:15px; margin-bottom:4px; color: var(--text)}
-      .toast span{display:block; font-size:14px; color: var(--muted)}
-      .toast .x{
-        position:absolute; right:12px; top:12px;
-        border:none; background: transparent;
-        color: var(--muted2); cursor:pointer;
-        font-size:20px; line-height:1;
-        padding: 4px;
-      }
-      .toast .x:hover{color: var(--text)}
-    </style>
-  </head>
-
-  <body id="top">
-    <header class="nav">
-      <div class="wrap">
-        <div class="nav-inner">
-          <a class="brand" href="#top" aria-label="Voyavent home">
-            <span class="logo" aria-hidden="true"></span>
-            <span>Voyavent</span>
-          </a>
-
-          <nav class="nav-links" aria-label="Primary">
-            <a href="#problem">Problem</a>
-            <a href="#solution">Solution</a>
-            <a href="#how">How it works</a>
-            <a href="#mvp">MVP</a>
-            <a href="#contact">Contact</a>
-          </nav>
-
-          <div class="cta">
-            <button class="btn mobile-only" id="menuBtn" type="button" aria-label="Open menu">Menu</button>
-            <a class="btn" href="#contact">Request access</a>
-            <a class="btn primary" href="#contact">Talk to us</a>
+  return (
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100' : 'bg-transparent'}`}>
+      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/20">
+            <span className="font-bold text-white text-xl">V</span>
           </div>
+          <span className={`text-2xl font-bold tracking-tight ${scrolled ? 'text-slate-900' : 'text-slate-900'}`}>Voyavent</span>
+        </div>
+        
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-500">
+          <a href="#how-it-works" className="hover:text-blue-600 transition-colors">How it Works</a>
+          <a href="#protection" className="hover:text-blue-600 transition-colors">Protection</a>
+          <a href="#events" className="hover:text-blue-600 transition-colors">Events</a>
+          <a href="#pricing" className="hover:text-blue-600 transition-colors">Pricing</a>
+        </div>
+        <div className="hidden md:block">
+          <button className="bg-slate-900 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+            Download App
+          </button>
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <div className="md:hidden">
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-slate-900">
+            {mobileMenuOpen ? <X /> : <Menu />}
+          </button>
         </div>
       </div>
-    </header>
 
-    <main>
-      <section class="hero">
-        <div class="wrap">
-          <div class="hero-grid">
-            <div>
-              <div class="pill-row">
-                <div class="pill"><span class="dot"></span><span>Event first orchestration</span></div>
-                <div class="pill">World Cup scale</div>
-                <div class="pill">Real-time adaptive</div>
-              </div>
-
-              <h1>Make the event the anchor, not just another tab.</h1>
-              <p class="sub">
-                Voyavent orchestrates high friction journeys where timing matters. Multi-city itineraries, tight windows,
-                and shifting schedules, all aligned to the single moment you cannot miss.
-              </p>
-
-              <div class="hero-actions">
-                <a class="btn primary" href="#contact">Get early access</a>
-                <a class="btn" href="#how">See how it works</a>
-              </div>
-
-              <p class="small">
-                <strong>Why now?</strong> Execution risk has shifted onto the traveler. We reduce missed connections
-                and fragmented bookings by turning your event into the system of record.
-              </p>
-            </div>
-
-            <aside class="panel card" aria-label="Trip risk snapshot">
-              <h3>Trip Health Snapshot</h3>
-              <div class="metric">
-                <div class="row">
-                  <span>Anchor event start</span>
-                  <span class="tag ok"><i></i>Protected</span>
-                </div>
-                <div class="row">
-                  <span>Inbound connection buffer</span>
-                  <span class="tag warn"><i></i>Moderate (45m)</span>
-                </div>
-                <div class="row">
-                  <span>Ground transfer reliability</span>
-                  <span class="tag warn"><i></i>Variable</span>
-                </div>
-                <div class="row">
-                  <span>Contingency coverage</span>
-                  <span class="tag bad"><i></i>Missing</span>
-                </div>
-              </div>
-              <div class="divider" style="margin: 16px -24px;"></div>
-              <p class="small" style="margin-top:0">
-                Voyavent continuously monitors changes, flags risks early, and proposes fixes you can accept in one click.
-              </p>
-            </aside>
-          </div>
+      {/* Mobile Menu Dropdown */}
+      {mobileMenuOpen && (
+        <div className="md:hidden absolute top-20 left-0 w-full bg-white border-b border-gray-100 p-6 flex flex-col gap-4 shadow-xl">
+          <a href="#how-it-works" className="text-slate-600 font-medium" onClick={() => setMobileMenuOpen(false)}>How it Works</a>
+          <a href="#protection" className="text-slate-600 font-medium" onClick={() => setMobileMenuOpen(false)}>Protection</a>
+          <a href="#events" className="text-slate-600 font-medium" onClick={() => setMobileMenuOpen(false)}>Events</a>
+          <button className="bg-blue-600 text-white px-5 py-3 rounded-xl text-sm font-bold w-full shadow-lg shadow-blue-600/20">
+            Download App
+          </button>
         </div>
-      </section>
+      )}
+    </nav>
+  );
+};
 
-      <section id="problem" class="section" style="background: #f8fafc">
-        <div class="wrap">
-          <h2>The problem</h2>
-          <p class="lead">
-            Most travel products optimize for simple bookings. Event travel is the opposite. One delay can cascade into missed
-            matches, lost lodging, and expensive last minute fixes across disconnected systems.
-          </p>
+const Hero = () => {
+  return (
+    <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-slate-50 min-h-[95vh] flex flex-col justify-center">
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-blue-50 to-transparent pointer-events-none"></div>
+      <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
 
-          <div class="grid3">
-            <div class="panel feature">
-              <div class="kicker">Fragmentation</div>
-              <h3>Disconnected tools</h3>
-              <p>
-                Travelers stitch together itineraries manually, with no single view of how a flight delay affects the stadium entry window.
-              </p>
-            </div>
-            <div class="panel feature">
-              <div class="kicker">Execution risk</div>
-              <h3>Cascading failures</h3>
-              <p>
-                Tight connections and city changes amplify disruption. Currently, recovery is 100% DIY and stressful.
-              </p>
-            </div>
-            <div class="panel feature">
-              <div class="kicker">Static Plans</div>
-              <h3>No feedback loops</h3>
-              <p>
-                When schedules shift, you need a system that recalculates buffers and alternatives instantly, not just an email alert.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="solution" class="section">
-        <div class="wrap">
-          <h2>The solution</h2>
-          <p class="lead">
-            Voyavent operates at the application layer. The event is the anchor for the entire trip. We help orchestrate
-            flights and ground transport around event constraints.
-          </p>
-
-          <div class="grid2">
-            <div class="panel feature">
-              <div class="kicker">Anchor first</div>
-              <h3>Event constrained planning</h3>
-              <p>
-                Build a trip that starts from kickoff time. We compute the arrival window, buffers, transfers, and fallback options automatically.
-              </p>
-              <ul class="list">
-                <li class="li">
-                  <div class="chk" aria-hidden="true"></div>
-                  <div>
-                    <strong>Arrival window logic</strong>
-                    <span>Arrive with enough time for airport delays, city transit, and stadium entry.</span>
-                  </div>
-                </li>
-                <li class="li">
-                  <div class="chk" aria-hidden="true"></div>
-                  <div>
-                    <strong>Connection risk scoring</strong>
-                    <span>Flag itineraries that look cheap but are time-fragile.</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="panel feature">
-              <div class="kicker">Monitor and adapt</div>
-              <h3>Continuous trip health</h3>
-              <p>
-                Track schedule changes and disruption signals, then propose actionable adjustments while keeping the traveler in control.
-              </p>
-              <ul class="list">
-                <li class="li">
-                  <div class="chk" aria-hidden="true"></div>
-                  <div>
-                    <strong>Change detection</strong>
-                    <span>Detect flight schedule shifts and knock-on effects immediately.</span>
-                  </div>
-                </li>
-                <li class="li">
-                  <div class="chk" aria-hidden="true"></div>
-                  <div>
-                    <strong>Contingency playbooks</strong>
-                    <span>One-click booking for backup flights or earlier transfers.</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="how" class="section" style="background: #f8fafc">
-        <div class="wrap">
-          <h2>How it works</h2>
-          <p class="lead">
-            Keep it simple. One anchor event, one orchestration view, one set of decisions. Voyavent is designed to prove value fast.
-          </p>
-
-          <div class="grid3">
-            <div class="panel feature">
-              <div class="kicker">Step 1</div>
-              <h3>Set your anchor</h3>
-              <p>Choose the match, the venue city, and the kickoff time. This becomes your hard trip constraint.</p>
-            </div>
-            <div class="panel feature">
-              <div class="kicker">Step 2</div>
-              <h3>Generate options</h3>
-              <p>See itineraries ranked by "Event Safety Score" rather than just price or duration.</p>
-            </div>
-            <div class="panel feature">
-              <div class="kicker">Step 3</div>
-              <h3>Stay in control</h3>
-              <p>When disruptions happen, Voyavent proposes fixes. You accept, reject, or modify in one flow.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="mvp" class="section">
-        <div class="wrap">
-          <h2>MVP focus</h2>
-          <p class="lead">
-            The fastest path to value is flights only, anchored to the event. We prove risk reduction first, then expand.
-          </p>
-
-          <div class="grid2">
-            <div class="panel feature">
-              <div class="kicker">What we ship first</div>
-              <h3>Flights, ranked by event safety</h3>
-              <ul class="list">
-                <li class="li">
-                  <div class="chk" aria-hidden="true"></div>
-                  <div>
-                    <strong>Event safe recommendations</strong>
-                    <span>Routes that statistically meet buffer requirements.</span>
-                  </div>
-                </li>
-                <li class="li">
-                  <div class="chk" aria-hidden="true"></div>
-                  <div>
-                    <strong>Clear risk labels</strong>
-                    <span>"Safe", "Risky", "Impossible" labels based on real-time data.</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="panel feature">
-              <div class="kicker">What we measure</div>
-              <h3>Data that proves value</h3>
-              <ul class="list">
-                <li class="li">
-                  <div class="chk" aria-hidden="true"></div>
-                  <div>
-                    <strong>Decision velocity</strong>
-                    <span>Time it takes a traveler to choose a complex route with confidence.</span>
-                  </div>
-                </li>
-                <li class="li">
-                  <div class="chk" aria-hidden="true"></div>
-                  <div>
-                    <strong>Disruption cost saved</strong>
-                    <span>Estimated money saved from avoided missed connections.</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="contact" class="section">
-        <div class="wrap">
-          <div class="cta-band">
-            <div class="cta-box">
-              <h3>Get early access</h3>
-              <p>
-                Share your event city and travel pattern. We will invite a small set of testers building toward World Cup travel.
-              </p>
-
-              <form id="leadForm">
-                <div>
-                  <label for="name">Name</label>
-                  <input id="name" name="name" type="text" placeholder="Your name" required />
-                </div>
-                <div>
-                  <label for="email">Email</label>
-                  <input id="email" name="email" type="email" placeholder="you@company.com" required />
-                </div>
-                <div>
-                  <label for="role">You are</label>
-                  <select id="role" name="role" required>
-                    <option value="" selected disabled>Select one</option>
-                    <option>Traveler</option>
-                    <option>Group organizer</option>
-                    <option>Partner (Airline/OTA)</option>
-                    <option>Investor</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="message">What event travel problem should we solve first?</label>
-                  <textarea id="message" name="message" placeholder="Example: I need safer connections for a multi-city Euro trip..."></textarea>
-                </div>
-
-                <button class="btn primary" type="submit" style="justify-self:start; width:100%">Submit Request</button>
-                <p class="small" style="margin: 12px 0 0">
-                  This demo form saves locally. It creates an email draft for you to send.
-                </p>
-              </form>
-            </div>
-
-            <div class="panel feature" style="border:none; background:transparent; box-shadow:none; padding-top:0">
-              <div class="kicker">Partnerships</div>
-              <h3>Build the orchestration layer together</h3>
-              <p>
-                Voyavent is designed to integrate booking and live data sources. If you are a travel provider, event operator,
-                or data vendor, we want to talk.
-              </p>
-              <ul class="list">
-                <li class="li" style="background: #ffffff">
-                  <div class="chk" aria-hidden="true"></div>
-                  <div>
-                    <strong>Value to travelers</strong>
-                    <span>Fewer missed events, clearer decisions, smoother execution.</span>
-                  </div>
-                </li>
-                <li class="li" style="background: #ffffff">
-                  <div class="chk" aria-hidden="true"></div>
-                  <div>
-                    <strong>Value to partners</strong>
-                    <span>Higher conversion on complex trips, fewer support escalations.</span>
-                  </div>
-                </li>
-              </ul>
-              
-              <div class="email-block-container"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="footer">
-        <div class="wrap">
-          <div class="footrow">
-            <div>
-              <strong style="color:var(--text); font-size:16px">Voyavent</strong>
-              <div style="margin-top:4px">Event first travel orchestration.</div>
-            </div>
-            <div class="right">
-              <a href="#problem">Problem</a>
-              <a href="#solution">Solution</a>
-              <a href="#mvp">MVP</a>
-              <a href="#contact">Contact</a>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <div class="toast" id="toast" role="status" aria-live="polite">
-      <button class="x" type="button" id="toastClose" aria-label="Close">×</button>
-      <strong id="toastTitle">Saved locally</strong>
-      <span id="toastMsg">We also generated an email draft below.</span>
-    </div>
-
-    <script>
-      (function () {
-        // Mobile Menu Logic
-        const menuBtn = document.getElementById("menuBtn");
-        const nav = document.querySelector(".nav-links");
+      <div className="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
         
-        if (menuBtn && nav) {
-          menuBtn.addEventListener("click", () => {
-            const isHidden = getComputedStyle(nav).display === "none";
-            nav.style.display = isHidden ? "flex" : "none";
+        {/* Left Column: Copy */}
+        <div className="text-left">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 bg-white border border-blue-100 rounded-full px-4 py-1.5 shadow-sm mb-8"
+          >
+            <span className="flex h-2 w-2 rounded-full bg-blue-600 animate-pulse"></span>
+            <span className="text-sm font-bold text-slate-600 uppercase tracking-wide">Live for World Cup 2026</span>
+          </motion.div>
+
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.1]"
+          >
+            Don't just book a flight. <br />
+            <span className="text-blue-600">Secure the moment.</span>
+          </motion.h1>
+
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-lg md:text-xl text-slate-600 max-w-lg mb-10 leading-relaxed font-medium"
+          >
+            Voyavent connects your flight, hotel, and ticket into one <strong>smart itinerary</strong>. If the event moves, your trip moves with it. No stress, just the show.
+          </motion.p>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4"
+          >
+            <button className="group relative px-8 py-4 rounded-full bg-blue-600 text-white font-bold text-base hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2 hover:-translate-y-1">
+              Find Your Event
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button className="px-8 py-4 rounded-full bg-white border border-slate-200 text-slate-700 font-bold text-base hover:bg-slate-50 transition-all shadow-sm flex items-center justify-center gap-2 hover:-translate-y-1">
+              <ShieldCheck className="w-5 h-5 text-emerald-500" />
+              How we protect you
+            </button>
+          </motion.div>
+
+          <div className="mt-10 flex items-center gap-4 text-sm font-medium text-slate-400">
+            <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-slate-300" /> ATOL Protected</span>
+            <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-slate-300" /> ABTA Bonded</span>
+          </div>
+        </div>
+
+        {/* Right Column: Visual */}
+        <motion.div 
+           initial={{ opacity: 0, x: 50 }}
+           animate={{ opacity: 1, x: 0 }}
+           transition={{ delay: 0.4 }}
+           className="relative hidden lg:block"
+        >
+            {/* The Phone Mockup */}
+            <div className="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[320px] shadow-2xl flex flex-col overflow-hidden transform rotate-[-6deg] hover:rotate-0 transition-all duration-700 ease-out z-10">
+                <div className="h-[32px] bg-gray-800 w-full absolute top-0 left-0 rounded-t-[2.5rem] z-20"></div>
+                <div className="h-full w-full bg-slate-50 overflow-hidden relative font-sans">
+                    
+                    {/* App Header */}
+                    <div className="bg-white p-6 pb-4 pt-12 shadow-sm z-10 relative">
+                        <div className="flex justify-between items-center mb-4">
+                            <span className="font-bold text-slate-900 text-lg">My Trip</span>
+                            <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
+                                <span className="text-xs font-bold text-slate-500">JD</span>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-indigo-200">
+                                ⚽️
+                            </div>
+                            <div>
+                                <h2 className="font-bold text-slate-900 leading-tight">World Cup Final</h2>
+                                <p className="text-xs text-slate-500 font-medium">MetLife Stadium, NJ</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Timeline Line */}
+                    <div className="absolute left-8 top-32 bottom-0 w-0.5 bg-slate-200 z-0"></div>
+
+                    {/* Trip Items */}
+                    <div className="p-6 space-y-6 relative z-10">
+                        
+                        {/* Flight Item */}
+                        <div className="relative pl-8">
+                            <div className="absolute left-[-5px] top-1 w-3 h-3 bg-slate-300 rounded-full border-2 border-white"></div>
+                            <div className="bg-white p-3 rounded-xl shadow-sm border border-slate-100">
+                                <div className="flex justify-between items-start mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <Plane className="w-4 h-4 text-blue-500" />
+                                        <span className="font-bold text-slate-700 text-sm">Flight BA294</span>
+                                    </div>
+                                    <span className="text-xs font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">On Time</span>
+                                </div>
+                                <div className="flex justify-between text-xs text-slate-500">
+                                    <span>LHR 10:45</span>
+                                    <span>→</span>
+                                    <span>JFK 13:30</span>
+                                </div>
+                            </div>
+                        </div>
+
+                         {/* Hotel Item */}
+                         <div className="relative pl-8">
+                            <div className="absolute left-[-5px] top-1 w-3 h-3 bg-slate-300 rounded-full border-2 border-white"></div>
+                            <div className="bg-white p-3 rounded-xl shadow-sm border border-slate-100">
+                                <div className="flex justify-between items-start mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <MapPin className="w-4 h-4 text-purple-500" />
+                                        <span className="font-bold text-slate-700 text-sm">The Standard</span>
+                                    </div>
+                                    <span className="text-xs text-slate-400">2 Nights</span>
+                                </div>
+                                <p className="text-xs text-slate-500">Check-in: 15:00</p>
+                            </div>
+                        </div>
+
+                         {/* Event Item - HERO */}
+                         <div className="relative pl-8">
+                            <div className="absolute left-[-6px] top-1 w-4 h-4 bg-blue-600 rounded-full border-2 border-white shadow-lg shadow-blue-500/50 ring-4 ring-blue-100"></div>
+                            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-4 rounded-xl shadow-xl shadow-blue-600/20 text-white transform scale-105">
+                                <div className="flex justify-between items-start mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <Ticket className="w-4 h-4 text-blue-200" />
+                                        <span className="font-bold text-white text-sm">Kick Off</span>
+                                    </div>
+                                    <span className="font-mono font-bold text-xs bg-white/20 px-2 py-1 rounded">20:00</span>
+                                </div>
+                                <p className="text-xs text-blue-100 mb-2">Section 104, Row 12</p>
+                                <div className="flex items-center gap-1 text-[10px] text-blue-200 bg-black/20 px-2 py-1 rounded-lg w-fit">
+                                    <ShieldCheck className="w-3 h-3" />
+                                    Arrival Protected
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {/* Floating Alert Toast */}
+                    <div className="absolute bottom-6 left-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-xl border border-emerald-100 shadow-lg flex items-center gap-3 animate-bounce-slow">
+                        <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-5 h-5 text-emerald-600" />
+                        </div>
+                        <div>
+                            <p className="text-xs font-bold text-slate-800">Itinerary Synced</p>
+                            <p className="text-[10px] text-slate-500">Monitoring flight delays vs. kick-off.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
             
-            if (isHidden) {
-              nav.style.flexDirection = "column";
-              nav.style.gap = "4px";
-              nav.style.position = "absolute";
-              nav.style.right = "24px";
-              nav.style.top = "80px";
-              nav.style.padding = "16px";
-              nav.style.borderRadius = "16px";
-              nav.style.border = "1px solid var(--line)";
-              nav.style.background = "#ffffff";
-              nav.style.boxShadow = "0 20px 60px -10px rgba(0,0,0,0.15)";
-              nav.style.width = "200px";
-              nav.style.alignItems = "stretch";
-            }
-          });
-        }
+            {/* Background elements for phone */}
+            <div className="absolute top-20 right-10 w-64 h-64 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+            <div className="absolute top-40 right-40 w-64 h-64 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
 
-        // Form & Toast Logic
-        const form = document.getElementById("leadForm");
-        const toast = document.getElementById("toast");
-        const toastClose = document.getElementById("toastClose");
+const ValueProps = () => {
+  return (
+    <section className="py-24 bg-white" id="how-it-works">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center max-w-3xl mx-auto mb-20">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Traveling for an event is different. <br/>Why use a tool built for vacations?</h2>
+            <p className="text-lg text-slate-600">Standard booking sites don't know why you're traveling. We do. We link your logistics to the main event.</p>
+        </div>
 
-        function showToast(title, msg) {
-          document.getElementById("toastTitle").textContent = title;
-          document.getElementById("toastMsg").textContent = msg;
-          toast.style.display = "block";
-          setTimeout(() => { toast.style.display = "none"; }, 5000);
-        }
-        
-        function hideToast() {
-          toast.style.display = "none";
-        }
-        if (toastClose) toastClose.addEventListener("click", hideToast);
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            
+            {/* Feature 1 */}
+            <div className="bg-slate-50 rounded-3xl p-8 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all border border-slate-100 group">
+                <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Clock className="w-8 h-8 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-3">Time-Locked Logistics</h3>
+                <p className="text-slate-500 leading-relaxed">
+                    We calculate "safe arrival windows" based on venue entry times. We won't let you book a flight that lands too close to the start.
+                </p>
+            </div>
 
-        function buildEmailDraft(data) {
-          return [
-            "Subject: Voyavent early access",
-            "",
-            "Hi Voyavent team,",
-            "",
-            "I would like early access to Voyavent.",
-            "",
-            "Name: " + (data.name || ""),
-            "Email: " + (data.email || ""),
-            "I am: " + (data.role || ""),
-            "",
-            data.message ? "Priority problem:\n" + data.message + "\n" : "",
-            "Thanks,",
-            data.name || ""
-          ].join("\n");
-        }
+            {/* Feature 2 */}
+            <div className="bg-slate-50 rounded-3xl p-8 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all border border-slate-100 group">
+                <div className="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Zap className="w-8 h-8 text-indigo-600" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-3">Live Disruption Fixes</h3>
+                <p className="text-slate-500 leading-relaxed">
+                    Flight delayed? If it overlaps with the event, we auto-trigger a rebooking sequence instantly. You don't call us; we alert you.
+                </p>
+            </div>
 
-        function renderEmailDraft(draft) {
-          let existing = document.getElementById("emailDraftBlock");
-          const container = document.querySelector(".email-block-container") || form.parentElement;
-          
-          if (!existing) {
-            existing = document.createElement("div");
-            existing.id = "emailDraftBlock";
-            existing.className = "panel card";
-            existing.style.marginTop = "24px";
-            existing.style.background = "#ffffff";
-            existing.innerHTML = `
-              <h3>Email draft generated</h3>
-              <p class="small" style="margin-top:0">Copy this and paste it into your email client.</p>
-              <textarea id="draftArea" spellcheck="false" style="min-height:160px; font-family:monospace; font-size:13px; background:#f1f5f9; border:none;"></textarea>
-              <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px">
-                <button class="btn primary" type="button" id="copyDraft">Copy Text</button>
-                <button class="btn" type="button" id="clearDraft">Clear Data</button>
-              </div>
-            `;
-            // Append to the Partners column on Desktop, or below form on Mobile
-            if(window.innerWidth > 920 && document.querySelector(".email-block-container")) {
-                 document.querySelector(".email-block-container").appendChild(existing);
-            } else {
-                 form.parentElement.appendChild(existing);
-            }
+            {/* Feature 3 */}
+            <div className="bg-slate-50 rounded-3xl p-8 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all border border-slate-100 group">
+                <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <ShieldCheck className="w-8 h-8 text-emerald-600" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-3">Total Trip Protection</h3>
+                <p className="text-slate-500 leading-relaxed">
+                    Since we bundle the flight, hotel, and ticket, we are legally responsible for the whole package. It's not just software; it's insurance.
+                </p>
+            </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-            document.getElementById("copyDraft").addEventListener("click", () => {
-              const draftArea = document.getElementById("draftArea");
-              draftArea.select();
-              try {
-                if(document.execCommand('copy')) showToast("Copied!", "Draft copied to clipboard.");
-                else throw new Error("fail");
-              } catch (err) {
-                navigator.clipboard.writeText(draftArea.value)
-                  .then(() => showToast("Copied!", "Draft copied to clipboard."))
-                  .catch(() => showToast("Error", "Please copy manually."));
-              }
-            });
+const InteractiveDemo = () => {
+  const [status, setStatus] = useState("normal"); // normal, delayed, fixed
 
-            document.getElementById("clearDraft").addEventListener("click", () => {
-              localStorage.removeItem("voyaventLead");
-              document.getElementById("draftArea").value = "";
-              form.reset();
-              showToast("Cleared", "Local saved data removed.");
-              existing.remove(); // Remove the block
-            });
-          }
-          document.getElementById("draftArea").value = draft;
-        }
+  return (
+    <section className="py-24 bg-slate-900 text-white overflow-hidden relative" id="protection">
+       {/* Background glow */}
+       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
-        function saveLead(data) {
-          localStorage.setItem("voyaventLead", JSON.stringify(data));
-        }
+       <div className="max-w-6xl mx-auto px-6 relative z-10">
+           <div className="flex flex-col lg:flex-row gap-16 items-center">
+               
+               <div className="flex-1">
+                   <div className="inline-block bg-blue-600/20 text-blue-300 px-4 py-1.5 rounded-full text-sm font-bold mb-6 border border-blue-500/30">
+                       RecoverAI™ Technology
+                   </div>
+                   <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                       The only travel app that knows <br/> <span className="text-blue-400">when the game starts.</span>
+                   </h2>
+                   <p className="text-lg text-slate-400 mb-8 leading-relaxed">
+                       Standard apps see a flight delay. We see a missed kick-off. <br/>
+                       Our system watches your event schedule in real-time. If a delay threatens your attendance, we wake up.
+                   </p>
+                   
+                   {/* Interactive Controls */}
+                   <div className="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
+                       <p className="text-sm font-bold text-slate-300 mb-4 uppercase tracking-wider">Simulate a disruption</p>
+                       <div className="flex gap-3">
+                           <button 
+                                onClick={() => setStatus("normal")}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${status === 'normal' ? 'bg-emerald-500 text-white' : 'bg-white/10 text-slate-400 hover:bg-white/20'}`}
+                           >
+                               On Time
+                           </button>
+                           <button 
+                                onClick={() => setStatus("delayed")}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${status === 'delayed' ? 'bg-red-500 text-white' : 'bg-white/10 text-slate-400 hover:bg-white/20'}`}
+                           >
+                               Flight Delayed
+                           </button>
+                           <button 
+                                onClick={() => setStatus("fixed")}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${status === 'fixed' ? 'bg-blue-500 text-white' : 'bg-white/10 text-slate-400 hover:bg-white/20'}`}
+                           >
+                               Voyavent Fix
+                           </button>
+                       </div>
+                   </div>
+               </div>
 
-        function loadLead() {
-          try {
-            const raw = localStorage.getItem("voyaventLead");
-            return raw ? JSON.parse(raw) : null;
-          } catch (e) { return null; }
-        }
+               {/* The Demo UI Card */}
+               <div className="flex-1 w-full max-w-md">
+                   <div className="bg-white text-slate-900 rounded-3xl p-6 shadow-2xl transition-all duration-500">
+                       {/* Header */}
+                       <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                           <div>
+                               <h3 className="font-bold text-lg">Trip to London</h3>
+                               <p className="text-xs text-slate-500">Taylor Swift - Eras Tour</p>
+                           </div>
+                           <div className={`px-3 py-1 rounded-full text-xs font-bold ${
+                               status === 'normal' ? 'bg-emerald-100 text-emerald-700' :
+                               status === 'delayed' ? 'bg-red-100 text-red-700 animate-pulse' :
+                               'bg-blue-100 text-blue-700'
+                           }`}>
+                               {status === 'normal' ? 'On Schedule' : status === 'delayed' ? 'Risk Detected' : 'Resolved'}
+                           </div>
+                       </div>
 
-        const saved = loadLead();
-        if (saved) {
-          document.getElementById("name").value = saved.name || "";
-          document.getElementById("email").value = saved.email || "";
-          document.getElementById("role").value = saved.role || "";
-          document.getElementById("message").value = saved.message || "";
-          renderEmailDraft(buildEmailDraft(saved));
-        }
+                       {/* Timeline */}
+                       <div className="space-y-6 relative pl-4">
+                           <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-gray-200"></div>
 
-        if (form) {
-          form.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const data = {
-              name: document.getElementById("name").value.trim(),
-              email: document.getElementById("email").value.trim(),
-              role: document.getElementById("role").value,
-              message: document.getElementById("message").value.trim()
-            };
-            saveLead(data);
-            renderEmailDraft(buildEmailDraft(data));
-            showToast("Saved", "Email draft generated.");
-          });
-        }
-      })();
-    </script>
-  </body>
-</html>
+                           {/* Flight Node */}
+                           <div className="relative pl-6">
+                               <div className={`absolute left-[-4px] top-1 w-3 h-3 rounded-full border-2 border-white transition-colors duration-500 ${
+                                   status === 'delayed' ? 'bg-red-500 scale-125' : 'bg-slate-300'
+                               }`}></div>
+                               <div className={`p-4 rounded-xl border transition-all duration-500 ${
+                                   status === 'delayed' ? 'bg-red-50 border-red-200' : 'bg-white border-gray-100 shadow-sm'
+                               }`}>
+                                   <div className="flex justify-between mb-1">
+                                       <span className="font-bold text-sm">Flight JFK → LHR</span>
+                                       <span className="text-xs font-mono">{status === 'delayed' ? 'DELAYED +4h' : '10:00 AM'}</span>
+                                   </div>
+                                   {status === 'delayed' && (
+                                       <p className="text-xs text-red-600 font-medium mt-1 flex items-center gap-1">
+                                           <AlertTriangle className="w-3 h-3" />
+                                           Impact: Misses Concert Start
+                                       </p>
+                                   )}
+                                   {status === 'fixed' && (
+                                       <p className="text-xs text-blue-600 font-medium mt-1 flex items-center gap-1">
+                                           <CheckCircle className="w-3 h-3" />
+                                           Rebooked to VS401 (Free)
+                                       </p>
+                                   )}
+                               </div>
+                           </div>
+
+                           {/* Event Node */}
+                           <div className="relative pl-6">
+                               <div className="absolute left-[-5px] top-1 w-3.5 h-3.5 bg-blue-600 rounded-full border-2 border-white"></div>
+                               <div className="p-4 rounded-xl bg-slate-50 border border-gray-100">
+                                   <div className="flex justify-between mb-1">
+                                       <span className="font-bold text-sm text-slate-800">Concert Start</span>
+                                       <span className="text-xs font-mono text-slate-500">07:00 PM</span>
+                                   </div>
+                                   <p className="text-xs text-slate-400">Wembley Stadium</p>
+                               </div>
+                           </div>
+                       </div>
+
+                       {/* Action Area */}
+                       <div className="mt-6 pt-4 border-t border-gray-100">
+                           <AnimatePresence mode="wait">
+                               {status === 'delayed' ? (
+                                   <motion.div 
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="bg-red-50 p-4 rounded-xl border border-red-100"
+                                   >
+                                       <p className="text-sm font-bold text-red-800 mb-2">Voyavent Protection Active</p>
+                                       <p className="text-xs text-red-600 mb-3">We found a new flight that arrives in time.</p>
+                                       <button className="w-full bg-red-600 text-white text-xs font-bold py-2 rounded-lg shadow-lg shadow-red-500/30">
+                                           Review New Itinerary
+                                       </button>
+                                   </motion.div>
+                               ) : status === 'fixed' ? (
+                                   <motion.div 
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="bg-blue-50 p-4 rounded-xl border border-blue-100"
+                                   >
+                                       <p className="text-sm font-bold text-blue-800 mb-1">Itinerary Updated</p>
+                                       <p className="text-xs text-blue-600">You are back on track for the show.</p>
+                                   </motion.div>
+                               ) : (
+                                   <div className="text-center text-xs text-slate-400 py-2">
+                                       System Monitoring Active...
+                                   </div>
+                               )}
+                           </AnimatePresence>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+    </section>
+  );
+};
+
+const Testimonials = () => {
+    return (
+        <section className="py-24 bg-white">
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl font-bold text-slate-900">Trusted by Superfans</h2>
+                    <p className="text-slate-500 mt-2">The official travel partner for people who don't miss the moment.</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {[
+                        {
+                            text: "I was following Man City to Istanbul. My flight got cancelled 6 hours before. Voyavent had already booked me a backup seat on another airline before I even woke up.",
+                            name: "Sarah Jenkins",
+                            badge: "Champions League Final"
+                        },
+                        {
+                            text: "Booking a flight and hotel separately for F1 is a nightmare. Voyavent synced everything to the qualifying schedule. It just makes sense.",
+                            name: "David Chen",
+                            badge: "Miami Grand Prix"
+                        },
+                        {
+                            text: "Expensive, but the peace of mind is worth it. Knowing that my trip is insured against 'missed kick-off' is a game changer for international games.",
+                            name: "Marcus Aloi",
+                            badge: "World Cup Qualifier"
+                        }
+                    ].map((item, i) => (
+                        <div key={i} className="p-8 bg-slate-50 rounded-2xl border border-slate-100">
+                            <div className="flex gap-1 mb-4">
+                                {[1,2,3,4,5].map(s => <div key={s} className="w-4 h-4 bg-yellow-400 rounded-sm"></div>)}
+                            </div>
+                            <p className="text-slate-700 mb-6 font-medium leading-relaxed">"{item.text}"</p>
+                            <div>
+                                <p className="font-bold text-slate-900">{item.name}</p>
+                                <p className="text-xs text-blue-600 font-bold uppercase tracking-wide mt-1">{item.badge}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+};
+
+const Footer = () => (
+  <footer className="py-16 bg-slate-50 border-t border-slate-200 text-slate-600 text-sm">
+    <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div className="col-span-1 md:col-span-2">
+        <div className="flex items-center gap-2 mb-6">
+          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+            <span className="font-bold text-white text-lg">V</span>
+          </div>
+          <span className="text-xl font-bold text-slate-900">Voyavent</span>
+        </div>
+        <p className="max-w-xs mb-6 text-slate-500">
+          The world's first event-centered travel platform. We don't just book tickets; we ensure you get there.
+        </p>
+        <div className="flex gap-4">
+             <span className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center hover:bg-blue-100 hover:text-blue-600 transition-colors cursor-pointer">X</span>
+             <span className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center hover:bg-blue-100 hover:text-blue-600 transition-colors cursor-pointer">in</span>
+             <span className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center hover:bg-blue-100 hover:text-blue-600 transition-colors cursor-pointer">IG</span>
+        </div>
+      </div>
+      
+      <div>
+        <h4 className="font-bold text-slate-900 mb-4">Platform</h4>
+        <ul className="space-y-3">
+          <li><a href="#" className="hover:text-blue-600">How it Works</a></li>
+          <li><a href="#" className="hover:text-blue-600">RecoverAI™</a></li>
+          <li><a href="#" className="hover:text-blue-600">Pricing</a></li>
+          <li><a href="#" className="hover:text-blue-600">Download App</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 className="font-bold text-slate-900 mb-4">Legal & Trust</h4>
+        <ul className="space-y-3">
+          <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-emerald-500"/> ABTA Bonded (Y6122)</li>
+          <li className="flex items-center gap-2"><CheckCircle className="w-3 h-3 text-emerald-500"/> ATOL Protected</li>
+          <li><a href="#" className="hover:text-blue-600">Terms of Service</a></li>
+          <li><a href="#" className="hover:text-blue-600">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div className="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-slate-200 text-center text-slate-400 text-xs">
+      &copy; 2026 Voyavent Inc. All rights reserved.
+    </div>
+  </footer>
+);
+
+export default function App() {
+  return (
+    <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-blue-100">
+      <Navbar />
+      <Hero />
+      <ValueProps />
+      <InteractiveDemo />
+      <Testimonials />
+      <Footer />
+    </div>
+  );
+}
